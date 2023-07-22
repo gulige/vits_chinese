@@ -935,6 +935,7 @@ class SynthesizerEval(nn.Module):
         stream_chunk = 100
         stream_index = 0
         stream_out_wav = []
+        count = -1
 
         while (stream_index + stream_chunk < len_z):
             if (stream_index == 0): # start frame
@@ -957,6 +958,11 @@ class SynthesizerEval(nn.Module):
             stream_out_wav.extend(o_chunk)
             stream_index = stream_index + stream_chunk
             print(datetime.datetime.now())
+            count++
+            if (stream_index >= len_z):
+                yield o_chunk, -1, stream_out_wav
+            else:
+                yield o_chunk, count, stream_out_wav
 
         if (stream_index < len_z):
             cut_s = stream_index - hop_frame
@@ -965,6 +971,7 @@ class SynthesizerEval(nn.Module):
             o_chunk = self.dec(z_chunk, g=g)[0, 0].data.cpu().float().numpy()
             o_chunk = o_chunk[cut_s_wav:]
             stream_out_wav.extend(o_chunk)
+            yield o_chunk, -1, stream_out_wav
 
-        stream_out_wav = numpy.asarray(stream_out_wav)
-        return stream_out_wav
+        #stream_out_wav = numpy.asarray(stream_out_wav)
+        #return stream_out_wav
