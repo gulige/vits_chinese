@@ -958,7 +958,7 @@ class SynthesizerEval(nn.Module):
             stream_out_wav.extend(o_chunk)
             stream_index = stream_index + stream_chunk
             print(datetime.datetime.now())
-            count++
+            count = count + 1
             if (stream_index >= len_z):
                 yield o_chunk, -1, stream_out_wav
             else:
