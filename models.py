@@ -923,10 +923,11 @@ class SynthesizerEval(nn.Module):
         z = self.flow(z_p, y_mask, g=g, reverse=True)
         len_z = z.size()[2]
         print('frame size is: ', len_z)
-        #if (len_z < 100):
-        #    print('no nead steam')
-        #    one_time_wav = self.dec(z, g=g)[0, 0].data.cpu().float().numpy()
-        #    return one_time_wav
+        if (len_z < 100):
+            print('no nead steam')
+            one_time_wav = self.dec(z, g=g)[0, 0].data.cpu().float().numpy()
+            #return one_time_wav
+            yield one_time_wav, -1, one_time_wav
 
         # can not change these parameters
         hop_length = 256 # bert_vits.json
