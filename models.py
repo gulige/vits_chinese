@@ -951,7 +951,7 @@ class SynthesizerEval(nn.Module):
 
             if (stream_index + stream_chunk > len_z - hop_frame): # end frame
                 cut_e = stream_index + stream_chunk
-                cut_e_wav = 0
+                cut_e_wav = -1
             else:
                 cut_e = stream_index + stream_chunk + hop_frame
                 cut_e_wav = -1 * hop_sample
